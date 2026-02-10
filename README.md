@@ -58,7 +58,7 @@ This work explores how we encode intent, constraints, and risk so that both huma
 
 If you are new here:
 
-1. Start with `/overview/what-this-is.md`
+1. Start with the [overview](overview/README.md) (what this is not, who it's for)
 2. Skim the `/patterns` directory to see what has stabilised
 3. Read the `/field-notes` to see what actually happened in practice
 4. Browse `/thoughts` for unfinished ideas and feedback
@@ -109,3 +109,11 @@ The future of software is not about writing code faster.
 It is about changing systems safely.
 
 Protocols help make that possible.
+
+---
+
+## Document log
+
+| Version | Date       | Author |
+|---------|------------|--------|
+| 0.1.0   | 2025-02-10 | Phil   |
