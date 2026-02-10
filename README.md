@@ -1,228 +1,90 @@
 # Protocol Driven Development (PDD)
 
-Protocol-Driven Development is a lightweight set of patterns for building and evolving software safely in a world where humans and AI systems both participate in development and maintenance.
+This repository is a working notebook.
 
-PDD is not a framework, a methodology, or a replacement for Agile.
-It is a way of making intent, constraints, and change explicit so systems can evolve without fear.
+It documents an ongoing exploration into how we make software change safer, clearer, and more intentional when AI-assisted tools are part of the development loop.
 
----
+The focus is not on writing code faster.  
+It is on governing change responsibly.
 
-## Why Protocol-Driven Development?
+This repo contains patterns, examples, field notes, and unfinished thinking gathered while applying these ideas to real systems.
 
-Modern teams face a growing set of problems:
-
-- Codebases are fragile and difficult to change safely
-- Critical knowledge lives in people’s heads or tribal memory
-- Agile processes often optimise for flow, not safety
-- AI tools can generate and refactor code quickly, but can also break important invariants
-- Maintenance now matters more than greenfield development
-
-PDD starts from a simple observation:
-
-> Code is no longer maintained only by humans.  
-> Change itself must become explicit and governed.
+It is intentionally incomplete.
 
 ---
 
-## Core Idea
+## What this is
 
-PDD treats **change** as a first-class concern.
+This is a place to capture:
 
-Instead of relying on:
-- conventions
-- unwritten rules
-- process ceremony
-- implicit assumptions
+- emerging patterns for governing change
+- lightweight protocols embedded close to code
+- examples of how AI tools behave in the presence of explicit rules
+- field notes from real experiments
+- ideas that worked
+- ideas that failed
+- ideas that are still unclear
 
-PDD introduces **protocols**: explicit, local, enforceable rules that define how code is built and how it may be safely changed.
-
-These protocols are:
-- colocated with the code they govern
-- readable by humans
-- actionable by AI tools
-- enforceable by workflow and tooling
+The material here is shaped by practice, not theory.
 
 ---
 
-## What PDD Is Not
+## What this is not
 
-- Not a programming language
-- Not an AI framework
-- Not a replacement for testing
-- Not another Agile variant
-- Not a rigid methodology
+This is not:
 
-PDD is designed to be adopted incrementally.
-You can add one protocol to one file and stop there.
+- a finished framework
+- a methodology to adopt wholesale
+- a replacement for Agile, Scrum, Kanban, TDD, or DDD
+- a set of universal rules
+- a product
 
----
-
-## The PDD Pattern Set
-
-PDD is an umbrella for a small family of patterns.
-You do not need all of them.
-
-### 1. Intent Contracts (IC)
-
-Intent Contracts describe **what is being built and why**, before implementation begins.
-
-They capture:
-- goals
-- non-goals
-- invariants
-- error modes
-- verification criteria
-
-Intent Contracts live outside code initially and guide creation.
+Think of this as a lab notebook that happens to be public.
 
 ---
 
-### 2. Local Build Protocols (LBP)
+## Why this exists
 
-Local Build Protocols guide **how new code should be created**.
+As AI tools move from being code generators to active maintainers, the central question shifts:
 
-They:
-- define build steps
-- constrain design decisions
-- specify tests and verification
-- act as scaffolding instructions for humans and AI tools
+How do we make change safe when a machine is part of the loop?
 
-LBPs usually start outside the codebase and are embedded into files when they are created.
+Much of today’s tooling optimises for speed.  
+This work explores how we encode intent, constraints, and risk so that both humans and AI can act with care.
 
 ---
 
-### 3. Local Change Protocols (LCP)
+## How to read this repository
 
-Local Change Protocols govern **how existing code may be modified**.
+If you are new here:
 
-They:
-- identify dangerous areas
-- define constraints and invariants
-- require tests or human review for specific changes
-- prevent silent breakage by automated tools
+1. Start with `/overview/what-this-is.md`
+2. Skim the `/patterns` directory to see what has stabilised
+3. Read the `/field-notes` to see what actually happened in practice
+4. Browse `/thoughts` for unfinished ideas and feedback
 
-LCPs are embedded directly in high-risk files.
-
----
-
-### 4. Zones and Guardrails (ZON)
-
-Zones and Guardrails define **risk boundaries** in a repository.
-
-They:
-- classify folders or modules by risk level
-- determine which protocols are required
-- set expectations for automation vs human review
-
-Zones make large systems navigable for both humans and AI.
+Not everything here is correct.  
+Everything here is honest.
 
 ---
 
-### 5. Change Units (CU)
-
-Change Units treat **change itself as a structured artifact**.
-
-Instead of a diff or ticket, a Change Unit captures:
-- intent
-- scope
-- constraints
-- risk
-- verification
-- rollback strategy
-
-Code becomes an output of a Change Unit, not the primary artifact.
-
----
-
-## A Simple Example
-
-```php
-/**
- * LOCAL_CHANGE_PROTOCOL
- * scope: payment amount calculation
- * risk_level: high
- *
- * constraints:
- *   - do_not_change: idempotency key generation
- *   - do_not_change: rounding rules
- *
- * requires_human_review:
- *   - any change to amount calculation logic
- *
- * verification:
- *   - PaymentContractTests must pass
- */
-final class PaymentCalculator
-{
-    // ...
-}
-
-## This Is Not Documentation
-
-This is not documentation.  
-It is a binding rule that governs change.
-
----
-
-## How PDD Works With AI Tools
-
-PDD is designed to work with AI-assisted tools such as Cursor, Copilot, or autonomous agents.
-
-Protocols:
-
-- give AI systems explicit constraints
-- prevent unsafe automated changes
-- enable safe refactoring and maintenance
-- allow AI to refuse changes when rules are violated
-
-AI becomes a collaborator, not a risk.
-
----
-
-## Adoption Strategy
-
-PDD is intentionally incremental.
-
-Suggested starting points:
-
-1. Identify one high-risk area
-2. Add a single Local Change Protocol
-3. Use it during the next modification
-4. Expand only if it helps
-
-There is no requirement to convert an entire codebase.
-
----
-
-## Relationship to Agile and Existing Practices
-
-PDD does not replace Agile, Scrum, Kanban, TDD, or DDD.
-
-Instead, it addresses gaps teams often feel but struggle to name:
-
-- change fear
-- fragile systems
-- lack of ownership
-- unclear invariants
-- unsafe automation
-
-PDD complements existing practices by making constraints explicit.
-
----
-
-## Project Status
+## Project status
 
 This project is exploratory and evolving.
 
-The goal is to:
+Patterns may change.  
+Ideas may be removed.  
+Language may be refined.
 
-- study how developers experience change today
-- experiment with protocol-based patterns
-- validate what works in real systems
-- share practical templates and examples
+Dates are preserved deliberately to show how the thinking evolves over time.
 
-This is not a finished methodology.  
-It is a working set of ideas under active refinement.
+---
+
+## Relationship to AI tools
+
+These ideas have been tested primarily with AI-assisted development tools such as Cursor and Copilot.
+
+The goal is not to control AI, but to give it clear boundaries so it can collaborate safely.
 
 ---
 
@@ -231,19 +93,19 @@ It is a working set of ideas under active refinement.
 Contributions are welcome, especially:
 
 - real-world examples
-- protocol templates
-- failure cases
-- critiques and refinements
+- critiques and failure cases
+- alternative protocol designs
+- observations about AI behaviour
 
-This project values practical experience over theory.
+Practical experience matters more than theory.
 
 ---
 
 ## Philosophy
 
-PDD is built on a simple belief:
+A simple belief underpins this work:
 
-> The future of software is not about writing code faster.  
-> It is about changing systems safely.
+The future of software is not about writing code faster.  
+It is about changing systems safely.
 
-Protocols make that possible.
+Protocols help make that possible.
