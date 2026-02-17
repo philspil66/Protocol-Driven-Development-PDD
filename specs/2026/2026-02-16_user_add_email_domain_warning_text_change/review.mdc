@@ -1,0 +1,40 @@
+# Review evidence – User Add Email Domain Warning Text Change
+
+*Populate when code review is complete. Use the file list in build-proof.mdc to run git diffs and verify changes. See spec-reviewer.mdc.*
+
+- **Review date**: 2026-02-16
+- **Reviewer**: AI Reviewer (Cursor), Spec Reviewer role
+
+## Scores (out of 10)
+- **Overall**: 10/10
+- **Spec fit**: 10/10 — New warning text matches spec exactly; condition and Swal options unchanged.
+- **Tests**: N/A — Spec states no automated test changes required for copy-only change.
+- **Standards**: 10/10 — Change correct; ASCII header added to file; code-style.mdc and code-quality.mdc satisfied.
+- **Scope**: 10/10 — Only `admin-client-view.js` touched; warning copy and file header only; no other edits.
+
+## Risk assessment
+- **Overall risk**: Low
+- **Factors**: None that raise risk (no Security/auth, Client data, Data integrity, Shared critical path, or Scope creep).
+- **Justification**: Single copy change in one client-side JS file; no backend, auth, or data handling. Revert is a one-line string revert. No regression to core flows beyond the displayed message.
+
+## Checklist
+- [x] All listed files (build-proof.mdc) checked — **Git diffs**: Per spec-reviewer.mdc step 2, the reviewer should run `git diff <base> -- <path>` for each file. In this run, git was not available in the review environment and the workspace was not confirmed as a git repo, so diffs were **not** run. Verification was done by reading the file and grepping for old/new text. **Recommendation**: When reviewing in an environment with git, run e.g. `git diff main -- resources/js/scripts/pages/admin-client-view.js` (or your branch base) and confirm the diff shows only the intended changes (warning copy + file header).
+- [x] Spec requirements and Success Criteria verified — FR1, FR2, NFR1, NFR2 and all Acceptance Criteria met.
+- [x] File headers and Code Review Checklist (code-quality.mdc) verified — ASCII header present; change minimal and compliant.
+- [x] Multi-tenant and security considerations checked — Spec confirms no change to auth/validation/data; no new attack surface; verified no logic change.
+
+## Findings
+
+### resources/js/scripts/pages/admin-client-view.js — **Pass**
+- **Spec fit**: The `html` value in the email-domain `Swal.fire` block is exactly the required new text, with single quotes correctly escaped. Title, icon, showCloseButton, confirmButtonText, confirmButtonAriaLabel and surrounding logic are unchanged.
+- **Old text removed**: No remaining "authorised domains" or old admin-seeking wording in the file.
+- **Scope**: Only the warning copy (and file header) changed; no other strings or logic altered.
+- **Standards**: ASCII header has been added per code-style.mdc; file is fully compliant with listed rule sets.
+
+### Build-proof.mdc
+- File list is complete and matches the spec (one file updated; none created/deleted).
+- Builder self-check: first two items ticked; manual test left for reviewer/QA as intended.
+
+## Conclusion
+
+Implementation aligns with the spec. The new email-domain warning copy is live in `resources/js/scripts/pages/admin-client-view.js` (source; build to public as needed), matches the required wording exactly, and no other behaviour or copy in that flow was changed. The ASCII header has been added to the file; it now fully complies with code-style.mdc. No outstanding non-conformities. Manual test (New User modal, non-allowed domain, confirm new message) remains for QA or reviewer to run; build-proof correctly leaves that unchecked.

@@ -1,0 +1,51 @@
+# Field report – AI performance building and implementing this spec
+
+**Spec:** User Add Email Domain Warning Text Change  
+**Report date:** 2026-02-16  
+**Purpose:** Document how well the AI (Spec Builder and Spec Reviewer roles) performed so we can improve future spec-driven builds.
+
+---
+
+## Overview
+
+This was a small, single-file spec: change one warning string in the "add user" email-domain flow (client-side JS). The spec package (spec.mdc, build-proof.mdc, review.mdc) was in place; the AI acted as **Spec Builder** (implementer) and **Spec Reviewer** (reviewer). Human (Phil) requested corrections and process improvements during the session. This report summarises what worked, what did not work without adjustment, what was changed, and the final outcome.
+
+---
+
+## What worked
+
+- **Spec clarity** — The spec was clear and unambiguous: exact old/new copy, single file, no backend changes. Easy for the builder to follow.
+- **Functional change correct** — The warning string was replaced with the exact new copy (allowed domains wording); condition and Swal options were left unchanged. No logic errors.
+- **Build-proof usage** — Builder listed the touched file and filled the self-check; reviewer used that list to verify. Structure worked.
+- **Review process** — Reviewer followed spec-reviewer.mdc: compared to spec, checked scope, applied rule sets, scored and risk-assessed, filled review.mdc with findings and conclusion.
+- **Rule-set alignment** — After guide updates, the spec's "Rule sets to apply" and the builder's obligation to "fully apply" them are now explicit (see "What we adjusted").
+- **Correction flow** — When the wrong file (public vs resources) and missing file header were identified, corrections were applied to the right file and docs were updated consistently.
+
+---
+
+## What didn't work without adjustment
+
+- **Wrong file path** — The spec and builder targeted `public/js/scripts/pages/admin-client-view.js`. The actual source file is `resources/js/scripts/pages/admin-client-view.js`; public is build output. The builder (and spec) did not distinguish source vs built assets, so implementation and docs pointed at the wrong path.
+- **File header not applied** — The builder made only the copy change and did not add the ASCII header required by code-style.mdc for JS files. The spec had listed "Rule sets to apply" but the builder treated it as "minimal change only" rather than full compliance for the touched file.
+- **Git diffs not run in review** — The reviewer was supposed to run `git diff <base> -- <path>` per spec-reviewer.mdc. Git was not available in the review environment (terminal), so diffs were skipped and verification was done by reading the file and grepping. Review documented the gap and recommended running the diff when git is available.
+
+---
+
+## What we adjusted
+
+- **Correct file** — Implementation and header were applied to `resources/js/scripts/pages/admin-client-view.js`. `public/js/...` was reverted to original so the source of truth is resources and the build can overwrite public.
+- **File header** — ASCII header was added to `resources/js/scripts/pages/admin-client-view.js` per code-style.mdc (post-review correction).
+- **Spec, build-proof, and review paths** — All references to the changed file were updated from `public/js/scripts/pages/admin-client-view.js` to `resources/js/scripts/pages/admin-client-view.js` in spec.mdc, build-proof.mdc, and review.mdc. Deployment section in the spec now states that the source is in resources and the front-end build updates public.
+- **Spec Creator and Spec Builder guides** — `.cursor/rules/spec-creator.mdc` and `.cursor/rules/spec-builder.mdc` were updated so that: (1) the Spec Creator lists every applicable rule for the file types touched, and (2) the Spec Builder must **fully apply** each listed rule to every touched file (e.g. add file headers, PHPDoc), not only the minimal functional change. This should reduce "missing header" and similar gaps on future specs.
+- **Review scores and conclusion** — Review was updated to reflect the header addition (Standards 10/10, Overall 10/10) and the correct file path in findings and conclusion.
+
+---
+
+## Summary of outcome
+
+- **Delivery:** **Success** — The correct source file (`resources/js/scripts/pages/admin-client-view.js`) now contains the new warning copy and the file header; spec, build-proof, and review all reference that file. Manual test (New User modal, non-allowed domain) remains for QA.
+- **Process:** **Partial success, then improved** — Initial build targeted the wrong path and omitted the header; review caught the header gap but not the path (path was caught by human). Corrections and guide updates should improve future spec builds (path clarity in specs for source vs built assets; full application of rule sets by the builder).
+- **Recommendations for next time:**  
+  - For JS/CSS and similar assets, have the spec explicitly call out **source** path (e.g. `resources/js/...`) and note that public is build output.  
+  - Ensure the builder's environment or instructions make "full rule application" obvious (guides now do).  
+  - Where possible, run reviewer in an environment where `git` is on PATH so git diffs can be executed per spec-reviewer.mdc.

@@ -1,0 +1,177 @@
+# User Add Email Domain Warning Text Change – Implementation Plan
+
+**Title:** User Add Email Domain Warning Text Change  
+**Date:** 2026-02-16  
+**Author:** Phil  
+**Status:** Draft  
+**Spec type:** Implementation Plan (copy change)
+
+---
+
+## Overview
+
+### Purpose
+Update the warning message shown when an admin user adds a new client user whose email domain is not in that client's allowed domains list. The behaviour (when the warning is shown) stays the same; only the displayed text changes.
+
+### Scope
+- **In scope:** Replace the existing warning string with the new copy in the single location where it is rendered (client-side JavaScript).
+- **Out of scope:** No change to validation rules, backend logic, allowed-domains data, or when the warning is triggered.
+
+### Context
+When adding a new client user via the "New User" modal (e.g. from Admin → Client view), the UI warns if the entered email's domain is not in the client's "allowed domains" list. This spec updates that warning text to the requested wording.
+
+### Success metrics
+- The new warning text appears in place of the old text when the condition is met.
+- No functional or behavioural change beyond the copy.
+
+---
+
+## Current System Analysis
+
+### Existing components
+- **File:** `resources/js/scripts/pages/admin-client-view.js` — contains the `Swal.fire` call that shows the email-domain warning on email input change when the domain is not in the client's allowed list. (Source file; built to public via front-end build.)
+- **Modal:** `resources/views/widgets/newUserModal.blade.php` — provides the New User form and hidden `input[name='domains']` with the client's `email_domains` (for admin users only).
+- **Validation:** Server-side validation and the email domain validation rule are unchanged; this spec does not alter when submission is allowed or blocked.
+
+### Patterns
+- Client-side check on email field change; SweetAlert2 (Swal) for the warning dialog.
+
+### Gaps
+- Current copy uses "authorised domains" and directs users to "seek an administrator"; the new copy uses "allowed domains" and instructs to "verify the domain" and "add it to the 'allowed domains' list to prevent this message appearing."
+
+### Dependencies
+- None; single JavaScript string change.
+
+---
+
+## Requirements
+
+### Functional requirements
+1. **FR1** When the "add user" email-domain warning is shown, the dialog body text MUST be exactly the new copy specified below.
+2. **FR2** The warning MUST still appear under the same conditions (email domain not in client's allowed domains list); only the text changes.
+
+### Non-functional requirements
+1. **NFR1** Change is limited to one JavaScript source file (`resources/js/scripts/pages/admin-client-view.js`); no database, config, or server-side logic changes.
+2. **NFR2** Existing file header and formatting in the file must be preserved per project standards.
+
+### User stories
+- **As an** admin user adding a new client user, **I want** the domain warning to say "allowed domains" and tell me I can add the domain to prevent the message **so that** the wording matches the client settings and is clearer.
+
+### Acceptance criteria
+- [ ] In `admin-client-view.js`, the Swal.fire `html` string for the email-domain warning is replaced with the new text.
+- [ ] No other strings or logic in that block are altered (title, icon, buttons, condition).
+- [ ] Manual test: open New User modal on a client with allowed domains, enter an email whose domain is not in the list, trigger the warning; the new message is displayed.
+
+**Current warning text (to be replaced):**
+```
+Please note that you are trying to add a user with an email domain that is not on the list of authorised domains for this client, and therefore may not be correct. If required, please seek an administrator to add this email domain.
+```
+
+**New warning text (required):**
+```
+Please note that you are trying to add a user with an email domain that is not on the 'allowed domains' list. Please verify the domain is correct, and if required add it to the 'allowed domains' list to prevent this message appearing.
+```
+
+---
+
+## Technical Architecture
+
+### Component affected
+- **File:** `resources/js/scripts/pages/admin-client-view.js`
+- **Approx. lines:** 374–396 (locate by the existing warning string "authorised domains" or "email domain that is not").
+- **Change:** Replace the multi-line string used as `html` in the `Swal.fire({ ... })` call for the domain warning.
+
+### Data flow (unchanged)
+- `input[name='domains']` is read from the New User modal (populated from client's `email_domains` in the Blade template).
+- On email input change, the script checks whether the email domain is in the allowed list and, if not, shows the Swal with the new text.
+
+### Integration points
+- None new; same modal and JS as today.
+
+---
+
+## Implementation Plan
+
+### Phase 1: Copy update (single change)
+1. Open `resources/js/scripts/pages/admin-client-view.js`.
+2. Locate the `Swal.fire` call that shows the email domain warning (search for "authorised domains" or "email domain that is not").
+3. Replace the `html` value with the new warning text:
+   - **New value (JavaScript string, escape single quotes):**  
+     `'Please note that you are trying to add a user with an email domain that is not on the \'allowed domains\' list. Please verify the domain is correct, and if required add it to the \'allowed domains\' list to prevent this message appearing.'`
+4. Ensure the rest of the Swal options (title, icon, showCloseButton, confirmButtonText, etc.) are unchanged.
+5. Save and run the project's usual lint/format checks if applicable.
+
+### Dependencies
+- None; no backend or config changes.
+
+### Estimated effort
+- **DS1 – Simple:** ~15–30 minutes (single string replacement + quick manual check).
+
+### Risk mitigation
+- Copy-only change; rollback by reverting the string.
+
+---
+
+## Testing Strategy
+
+### Manual testing
+1. Log in as an admin user with access to client management.
+2. Open a client that has at least one allowed domain (e.g. `example.com`) in "Allowed domains".
+3. Open the "Add New User" / "New User" modal for that client.
+4. Enter a user email whose domain is **not** in the allowed list (e.g. `user@other.com`).
+5. Trigger the email field change (e.g. blur or change event).
+6. **Verify:** The warning dialog appears with the **new** text (allowed domains wording and "verify… add it to the 'allowed domains' list to prevent this message appearing").
+7. **Verify:** Confirming the dialog still allows the user to continue (no unintended blocking).
+
+### Regression
+- No automated test changes required for a copy-only change; optional browser/Dusk test could assert the presence of a key phrase from the new text if the project adds such checks later.
+
+---
+
+## Security Considerations
+
+- No change to authorization, validation, or data handling. Multi-tenant isolation and allowed-domains behaviour are unchanged. No new attack surface.
+
+---
+
+## Performance Considerations
+
+- None; single string literal change. No new network or DOM behaviour.
+
+---
+
+## Deployment Considerations
+
+- No environment variables, migrations, or config. Source file is `resources/js/scripts/pages/admin-client-view.js`; run front-end build to update public assets. Cache-bust if needed per existing front-end release process.
+
+---
+
+## Success Criteria
+
+- [ ] New warning text is live in `resources/js/scripts/pages/admin-client-view.js`.
+- [ ] Manual test confirms the new message is shown when adding a user with a non-allowed email domain.
+- [ ] No other behaviour or copy in that flow is altered.
+
+---
+
+## Rule sets to apply
+
+The **builder** (implementer) must follow these rule sets when making changes for this spec:
+
+- **code-style.mdc** — File headers, naming, formatting; JavaScript conventions.
+- **code-quality.mdc** — Code Review Checklist, documentation, no breaking changes.
+
+*(No migrations, controllers, services, Blade, or server-side PHP are changed; only one JavaScript file is updated.)*
+
+---
+
+## Future Enhancements
+
+- Optional: add a Dusk or JS test that checks for the new warning text when the condition is met.
+- Optional: consider centralising user-facing copy in lang files or a shared constant for easier future changes.
+
+---
+
+## Conclusion
+
+This spec defines a single copy change for the "add user" email domain warning. Implementation is a one-line string replacement in `resources/js/scripts/pages/admin-client-view.js`, with manual verification that the new message appears when the email domain is not in the client's allowed domains list. Build evidence is recorded in **build-proof.mdc**; review evidence is recorded in **review.mdc**.
