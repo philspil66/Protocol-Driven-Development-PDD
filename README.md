@@ -1,249 +1,203 @@
-# Protocol Driven Development (PDD)
+# Protocol-Driven Development (PDD)
 
-Protocol-Driven Development is a lightweight set of patterns for building and evolving software safely in a world where humans and AI systems both participate in development and maintenance.
+Protocol-Driven Development (PDD) is a software engineering approach for building reliable systems using AI-assisted code generation.
 
-PDD is not a framework, a methodology, or a replacement for Agile.
-It is a way of making intent, constraints, and change explicit so systems can evolve without fear.
+Instead of generating code directly from prompts, PDD introduces **explicit engineering protocols** that govern how software is specified, generated, and validated.
 
----
+In PDD:
 
-## Why Protocol-Driven Development?
+- The AI can be probabilistic.
+- The pipeline cannot.
 
-Modern teams face a growing set of problems:
-
-- Codebases are fragile and difficult to change safely
-- Critical knowledge lives in people’s heads or tribal memory
-- Agile processes often optimise for flow, not safety
-- AI tools can generate and refactor code quickly, but can also break important invariants
-- Maintenance now matters more than greenfield development
-
-PDD starts from a simple observation:
-
-> Code is no longer maintained only by humans.  
-> Change itself must become explicit and governed.
+AI becomes the **implementation engine**, while the engineering process ensures determinism, structure, and reliability.
 
 ---
 
-## Core Idea
+# The Problem PDD Addresses
 
-PDD treats **change** as a first-class concern.
+Modern AI coding tools can generate large volumes of working code very quickly.
 
-Instead of relying on:
-- conventions
-- unwritten rules
-- process ceremony
-- implicit assumptions
+However, this often introduces new problems:
 
-PDD introduces **protocols**: explicit, local, enforceable rules that define how code is built and how it may be safely changed.
+- architecture drift
+- hidden design assumptions
+- inconsistent patterns
+- review bottlenecks
+- fragile systems that compile but are difficult to reason about
 
-These protocols are:
-- colocated with the code they govern
-- readable by humans
-- actionable by AI tools
-- enforceable by workflow and tooling
+In many workflows the process looks like:
 
----
+`prompt → AI → code`
 
-## What PDD Is Not
 
-- Not a programming language
-- Not an AI framework
-- Not a replacement for testing
-- Not another Agile variant
-- Not a rigid methodology
+While this may work for small experiments, it does not scale well for large systems.
 
-PDD is designed to be adopted incrementally.
-You can add one protocol to one file and stop there.
+PDD shifts the focus away from **code generation** and toward **controlling the process that governs generation**.
 
 ---
 
-## The PDD Pattern Set
+# The Core Idea
 
-PDD is an umbrella for a small family of patterns.
-You do not need all of them.
+Protocol-Driven Development introduces **explicit protocols** that define how software must be developed.
 
-### 1. Intent Contracts (IC)
+Instead of allowing AI to improvise architecture and implementation details, the system enforces a structured pipeline.
 
-Intent Contracts describe **what is being built and why**, before implementation begins.
+```
+Problem
+    ↓
+Specification
+    ↓
+Architecture Protocol
+    ↓
+AI Code Generation
+    ↓
+Validation & Contracts
+    ↓
+Production System
+```
 
-They capture:
-- goals
-- non-goals
-- invariants
-- error modes
-- verification criteria
-
-Intent Contracts live outside code initially and guide creation.
-
----
-
-### 2. Local Build Protocols (LBP)
-
-Local Build Protocols guide **how new code should be created**.
-
-They:
-- define build steps
-- constrain design decisions
-- specify tests and verification
-- act as scaffolding instructions for humans and AI tools
-
-LBPs usually start outside the codebase and are embedded into files when they are created.
+The protocol governs the generator.
 
 ---
 
-### 3. Local Change Protocols (LCP)
+# Key Principles
 
-Local Change Protocols govern **how existing code may be modified**.
+## Deterministic Process
 
-They:
-- identify dangerous areas
-- define constraints and invariants
-- require tests or human review for specific changes
-- prevent silent breakage by automated tools
+AI models are inherently probabilistic.
 
-LCPs are embedded directly in high-risk files.
+The development process around them must be deterministic.
+
+Protocols define the rules that constrain generation and ensure predictable outcomes.
 
 ---
 
-### 4. Zones and Guardrails (ZON)
+## Specification Before Implementation
 
-Zones and Guardrails define **risk boundaries** in a repository.
+Systems should be described before they are implemented.
 
-They:
-- classify folders or modules by risk level
-- determine which protocols are required
-- set expectations for automation vs human review
-
-Zones make large systems navigable for both humans and AI.
+Specifications define behaviour, inputs, outputs, constraints, and edge cases before code is produced.
 
 ---
 
-### 5. Change Units (CU)
+## Architecture as a Protocol
 
-Change Units treat **change itself as a structured artifact**.
+Architecture defines the structural rules of the system:
 
-Instead of a diff or ticket, a Change Unit captures:
-- intent
-- scope
-- constraints
-- risk
-- verification
-- rollback strategy
+- module boundaries
+- interfaces
+- data models
+- dependencies
+- system constraints  
 
-Code becomes an output of a Change Unit, not the primary artifact.
+AI generation must conform to these rules.
 
 ---
 
-## A Simple Example
+## Validation Restores Determinism
 
-```php
-/**
- * LOCAL_CHANGE_PROTOCOL
- * scope: payment amount calculation
- * risk_level: high
- *
- * constraints:
- *   - do_not_change: idempotency key generation
- *   - do_not_change: rounding rules
- *
- * requires_human_review:
- *   - any change to amount calculation logic
- *
- * verification:
- *   - PaymentContractTests must pass
- */
-final class PaymentCalculator
-{
-    // ...
-}
+Generated code must pass explicit validation layers:
 
-## This Is Not Documentation
+- tests
+- contracts
+- static analysis
+- architectural constraints  
 
-This is not documentation.  
-It is a binding rule that governs change.
+These mechanisms ensure reliability regardless of how the code was generated.
 
 ---
 
-## How PDD Works With AI Tools
+# Relationship to Classic Software Engineering
 
-PDD is designed to work with AI-assisted tools such as Cursor, Copilot, or autonomous agents.
+Protocol-Driven Development builds on several foundational ideas in software engineering:
 
-Protocols:
+| Concept | Origin |
+|---------|--------|
+| Stepwise Refinement | Niklaus Wirth (1971) |
+| Information Hiding | David Parnas (1972) |
+| Design by Contract | Bertrand Meyer |
+| Structured Programming | Edsger Dijkstra |
 
-- give AI systems explicit constraints
-- prevent unsafe automated changes
-- enable safe refactoring and maintenance
-- allow AI to refuse changes when rules are violated
+These ideas were originally developed to control **software complexity**.
 
-AI becomes a collaborator, not a risk.
-
----
-
-## Adoption Strategy
-
-PDD is intentionally incremental.
-
-Suggested starting points:
-
-1. Identify one high-risk area
-2. Add a single Local Change Protocol
-3. Use it during the next modification
-4. Expand only if it helps
-
-There is no requirement to convert an entire codebase.
+AI code generation makes them relevant again.
 
 ---
 
-## Relationship to Agile and Existing Practices
+# Why This Matters
 
-PDD does not replace Agile, Scrum, Kanban, TDD, or DDD.
+AI has made code generation extremely inexpensive.
 
-Instead, it addresses gaps teams often feel but struggle to name:
+The bottleneck in software development is shifting away from writing code and toward:
 
-- change fear
-- fragile systems
-- lack of ownership
-- unclear invariants
-- unsafe automation
+- architectural consistency
+- system reasoning
+- validation
+- maintainability  
 
-PDD complements existing practices by making constraints explicit.
-
----
-
-## Project Status
-
-This project is exploratory and evolving.
-
-The goal is to:
-
-- study how developers experience change today
-- experiment with protocol-based patterns
-- validate what works in real systems
-- share practical templates and examples
-
-This is not a finished methodology.  
-It is a working set of ideas under active refinement.
+Protocol-Driven Development focuses on the **engineering process that governs AI generation**, rather than the generation itself.
 
 ---
 
-## Contributing
+# Repository Structure
 
-Contributions are welcome, especially:
+This repository is an evolving exploration of Protocol-Driven Development.
 
-- real-world examples
-- protocol templates
-- failure cases
-- critiques and refinements
-
-This project values practical experience over theory.
+- **docs/**
+  - [introduction.md](docs/introduction.md)
+  - [core-principles.md](docs/core-principles.md)
+  - [protocol-layers.md](docs/protocol-layers.md)
+  - [ai-development-pipeline.md](docs/ai-development-pipeline.md)
+- **history/**
+  - [stepwise-refinement.md](history/stepwise-refinement.md)
+  - [design-by-contract.md](history/design-by-contract.md)
+  - [information-hiding.md](history/information-hiding.md)
+- **protocols/**
+  - [specification-protocol.md](protocols/specification-protocol.md)
+  - [architecture-protocol.md](protocols/architecture-protocol.md)
+  - [generation-protocol.md](protocols/generation-protocol.md)
+  - [validation-protocol.md](protocols/validation-protocol.md)
+- **examples/**
+  - [simple-pipeline-example.md](examples/simple-pipeline-example.md)
+- **diagrams/**
+  - [pdd-overview.md](diagrams/pdd-overview.md)
 
 ---
 
-## Philosophy
+# A Simple Definition
 
-PDD is built on a simple belief:
+Protocol-Driven Development is an engineering approach where:
 
-> The future of software is not about writing code faster.  
-> It is about changing systems safely.
+> **AI-assisted code generation is governed by explicit protocols that define specification, architecture, generation, and validation.**
 
-Protocols make that possible.
+Or more simply: `Protocol → AI → Code`
+
+The protocol controls the generator.
+
+---
+
+# Status
+
+This repository is an early exploration of the concept.
+
+The goal is to develop a practical framework for building reliable software systems using AI-assisted development while maintaining strong engineering discipline.
+
+---
+
+# Contributing
+
+Contributions and discussion are welcome.
+
+Areas of interest include:
+
+- engineering protocols for AI development
+- architecture constraint systems
+- validation pipelines
+- specification-first workflows
+- practical implementations of PDD  
+
+---
+
+# License
+
+TBD
