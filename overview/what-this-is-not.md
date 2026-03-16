@@ -19,10 +19,4 @@ Some will turn out to be context-dependent.
 
 That uncertainty is part of the work, not a flaw to be eliminated.
 
----
 
-## Document log
-
-| Version | Date       | Author |
-|---------|------------|--------|
-| 0.1.0   | 2025-02-10 | Phil   |
