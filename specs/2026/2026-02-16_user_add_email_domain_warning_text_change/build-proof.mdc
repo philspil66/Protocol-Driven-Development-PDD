@@ -1,0 +1,20 @@
+# Build evidence – User Add Email Domain Warning Text Change
+
+*Populate when implementation is complete. Lists files touched so a reviewer can run git diffs. Builder can add: unit tests run for files touched, builder self-check — see spec-builder.mdc.*
+
+- **Implementation date**: 2026-02-16
+- **Branch / commit ref** (optional): (branch or commit SHA for diff baseline)
+
+## Files Created
+- None
+
+## Files Updated
+- resources/js/scripts/pages/admin-client-view.js
+
+## Files Deleted
+- None
+
+## Builder self-check
+- [x] In `admin-client-view.js`, the Swal.fire `html` string for the email-domain warning is replaced with the new text.
+- [x] No other strings or logic in that block are altered (title, icon, buttons, condition).
+- [ ] Manual test: open New User modal on a client with allowed domains, enter an email whose domain is not in the list, trigger the warning; the new message is displayed (for reviewer or QA).
