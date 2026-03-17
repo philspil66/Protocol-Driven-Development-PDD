@@ -181,3 +181,9 @@ The process:
 Protocol-Driven Development applies this same idea to AI-assisted software engineering.
 
 Developers refine system descriptions through structured protocols, and AI assists with implementation once the design constraints are clearly defined.
+
+---
+
+# Source
+
+- **Wirth, N.** (1971). *Program Development by Stepwise Refinement*. [PDF in this repo](../papers/Program%20Development%20by%20Stepwise%20Refinement%20by%20Niklaus%20Wirth%20(1971).pdf)

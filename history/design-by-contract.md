@@ -190,3 +190,10 @@ Each component defines:
 These contracts make system behaviour explicit and verifiable.
 
 In Protocol-Driven Development, contracts form an essential part of the validation pipeline, ensuring that AI-generated implementation remains consistent with the system’s intended behaviour.
+
+---
+
+# Source
+
+- **Hoare, C. A. R.** (1969). *An Axiomatic Basis for Computer Programming*. [PDF in this repo](../papers/An%20Axiomatic%20basis%20%20for%20computer%20programming%20(1969)%20Hoare.pdf)
+- **Meyer, B.** (1980s). Design by Contract (Eiffel language and methodology).
