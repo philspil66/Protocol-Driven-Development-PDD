@@ -1,6 +1,6 @@
 # Information Hiding
 
-Information Hiding is a fundamental principle of software engineering introduced by **David L. Parnas** in his 1972 paper *On the Criteria to Be Used in Decomposing Systems into Modules*.
+Information Hiding is a fundamental principle of software engineering introduced by **David L. Parnas** in his 1972 paper [*On the Criteria to Be Used in Decomposing Systems into Modules*](../papers/On%20the%20Criteri%20To%20Be%20Used%20in%20Decomposing%20Systems%20into%20Modules%20(1972)%20DL%20Parnes.pdf).
 
 The central idea is simple:
 
@@ -194,3 +194,9 @@ By hiding implementation details, systems gain:
 - safer evolution
 
 In Protocol-Driven Development, information hiding ensures that AI-generated implementation remains contained within well-defined module boundaries, allowing the system architecture to remain stable even as the implementation evolves.
+
+---
+
+# Source
+
+- **Parnas, D. L.** (1972). *On the Criteria to Be Used in Decomposing Systems into Modules*. [PDF in this repo](../papers/On%20the%20Criteri%20To%20Be%20Used%20in%20Decomposing%20Systems%20into%20Modules%20(1972)%20DL%20Parnes.pdf)
